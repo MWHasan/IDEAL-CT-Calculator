@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "Please cite the software release used for your analysis."
+title: "IDEAL-CT Calculator"
+type: software
+status: development
+authors:
+  - family-names: Hasan
+    given-names: Morshed Washif
+repository-code: "https://github.com/MWHasan/IDEAL-CT-Calculator"
+version: 0.1.0
+abstract: >-
+  Python software for calculating IDEAL-CT parameters from load, load-line
+  displacement, and time data, with calculations and selected quality-control
+  diagnostics based on ASTM D8225-26.
+keywords:
+  - IDEAL-CT
+  - asphalt mixture
+  - pavement engineering
+  - cracking tolerance index
+  - CTIndex
+  - Python
+  - ASTM D8225-26

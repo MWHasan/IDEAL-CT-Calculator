@@ -1,0 +1,12 @@
+Parameter,Value,Unit
+Specimen ID,Example-01,
+Asphalt Mixture Type,Example Mix,
+Specimen Type,LMLC,
+Diameter,150,mm
+Thickness,62,mm
+NMAS,12.5,mm
+Air Voids,7.0,%
+Test Temperature,25,deg C
+Aging Condition,Short-term aged,
+
+Time (sec),Load (kN),Displacement (mm)
