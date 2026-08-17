@@ -56,6 +56,14 @@ CTIndex = (t / 62) × (l75 / D) × (Gf / |m75|)
 
 The thickness term is retained because D8225-26 applies a correction for specimen thickness relative to 62 mm.
 
+## Data normalization
+
+The calculator uses the first recorded load and first recorded LLD as the zero reference by default. This is intended to account for the non-zero seating load commonly present when the specimen is positioned in the fixture and for displacement transducer readings that do not begin at zero.
+
+This normalization is applied to both supported input formats after their columns have been mapped to the calculator's internal time, load, and LLD fields. The first recorded data point is retained; only the zero reference is shifted.
+
+Normalization can be disabled through the `baseline_correction=False` option in `analyze_ct_file()` when a different preprocessing convention is required for a research application.
+
 ## Data termination
 
 D8225-26 specifies stopping the test when the load drops below 100 N (0.1 kN). The calculator checks the post-peak data for the first point below 0.1 kN and, by default, ends the numerical analysis at that point.
@@ -74,9 +82,9 @@ A value below 40 Hz generates a warning. The check is based only on the supplied
 
 ## LLD rate
 
-D8225-26 specifies an LLD control rate of 50 ± 2 mm/min. The calculator reports a full-record displacement-rate estimate for diagnostic purposes.
+D8225-26 specifies an LLD control rate of 50 ± 2 mm/min. The calculator reports a **full-record displacement-rate estimate** for diagnostic purposes.
 
-This estimate is deliberately not treated as a full procedural compliance test because the complete recorded displacement history can include initial seating and post-failure behavior.
+The estimate is based on the change in recorded LLD over the complete analyzed record. It is deliberately not treated as a direct measurement of the machine control rate or as a full procedural compliance test because the recorded displacement can include initial seating and post-failure behavior.
 
 ## Specimen dimensions
 

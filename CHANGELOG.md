@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.2] - Development version
+
+### Changed
+- Clarified the distinction between ASTM D8225-26 calculation outputs and additional research parameters.
+- Clarified the default zero-reference normalization applied to both supported input formats.
+- Renamed the displacement-rate diagnostic output to `Full-Record Displacement Rate Estimate [mm/min]`.
+- Renamed the internal peak-load time variable for clarity.
+
 ## [0.1.1] - Development version
 
 ### Added

@@ -7,7 +7,7 @@ authors:
   - family-names: Hasan
     given-names: Morshed Washif
 repository-code: "https://github.com/MWHasan/IDEAL-CT-Calculator"
-version: 0.1.0
+version: 0.1.2
 abstract: >-
   Python software for calculating IDEAL-CT parameters from load, load-line
   displacement, and time data, with calculations and selected quality-control

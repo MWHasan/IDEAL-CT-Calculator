@@ -27,7 +27,7 @@ import pandas as pd
 from scipy.interpolate import interp1d
 from scipy.stats import linregress
 
-SOFTWARE_VERSION = "0.1.1"
+SOFTWARE_VERSION = "0.1.2"
 METHOD_BASIS = "ASTM D8225-26"
 DEFAULT_DIAMETER_MM = 150.0
 DEFAULT_THICKNESS_MM = 62.0
@@ -371,7 +371,7 @@ def analyze_ct_file(
 
     max_load_idx = int(df["Load Cell_Norm"].idxmax())
     max_load = float(df["Load Cell_Norm"].max())
-    time_at_failure = float(df.loc[max_load_idx, "Time"])
+    time_at_peak_load = float(df.loc[max_load_idx, "Time"])
     tensile_strength = float(df.loc[max_load_idx, "Stress"])
 
     # ASTM D8225-26 defines Wf as the area under the load-LLD curve using the
@@ -428,15 +428,19 @@ def analyze_ct_file(
         fst_index = np.nan
 
     sampling_hz = _estimate_sampling_rate(df["Time"])
-    loading_rate_mm_min = _estimate_full_record_displacement_rate(df["Time"], df["Frame LVDT_Norm"])
+    full_record_displacement_rate_mm_min = _estimate_full_record_displacement_rate(
+        df["Time"], df["Frame LVDT_Norm"]
+    )
 
     if not np.isnan(sampling_hz) and sampling_hz < (SAMPLING_RATE_MIN_HZ - 0.001):
         warnings.append(f"Estimated sampling frequency is {sampling_hz:.1f} Hz, below the 40 Hz minimum.")
-    if not np.isnan(loading_rate_mm_min) and not (
-        DISPLACEMENT_RATE_MIN_MM_MIN <= loading_rate_mm_min <= DISPLACEMENT_RATE_MAX_MM_MIN
+    if not np.isnan(full_record_displacement_rate_mm_min) and not (
+        DISPLACEMENT_RATE_MIN_MM_MIN
+        <= full_record_displacement_rate_mm_min
+        <= DISPLACEMENT_RATE_MAX_MM_MIN
     ):
         warnings.append(
-            f"Full-record displacement-rate estimate is {loading_rate_mm_min:.2f} mm/min; "
+            f"Full-record displacement-rate estimate is {full_record_displacement_rate_mm_min:.2f} mm/min; "
             "this is a diagnostic estimate, not a procedural compliance determination."
         )
 
@@ -457,10 +461,10 @@ def analyze_ct_file(
         "Thickness [mm]": thickness,
         "Test Temperature [deg C]": temperature if temperature is not None else np.nan,
         "Estimated Sampling Frequency [Hz]": sampling_hz,
-        "Estimated Displacement Rate [mm/min]": loading_rate_mm_min,
+        "Full-Record Displacement Rate Estimate [mm/min]": full_record_displacement_rate_mm_min,
         "Terminal Load Reached [below 0.1 kN]": terminated_at_01kN,
         "Analysis End Load [kN]": float(df["Load Cell_Norm"].iloc[-1]),
-        "Time at Peak Load [s]": time_at_failure,
+        "Time at Peak Load [s]": time_at_peak_load,
         "Maximum Load (P_Max) [kN]": max_load,
         "Tensile Strength (St) [kPa]": tensile_strength,
         "Fracture Strain Tolerance (FST) [mm]": fst_index,

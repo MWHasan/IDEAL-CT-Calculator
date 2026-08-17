@@ -4,9 +4,9 @@ Python software for calculating IDEAL-CT parameters from load, load-line displac
 
 The calculation workflow implements selected calculations and data-quality checks described in **ASTM D8225-26, Standard Test Method for Determination of Cracking Tolerance Index of Asphalt Mixture Using the Indirect Tensile Cracking Test at Intermediate Temperature**. The software is not an ASTM certification tool and does not determine whether a laboratory has met every requirement of the test method.
 
-## What it calculates
+## ASTM D8225-26 calculations
 
-For each specimen, the calculator reports ASTM-oriented results and selected research outputs:
+For each specimen, the calculator reports the following D8225-26 calculation outputs:
 
 - Maximum load, Pmax
 - Work of failure, Wf
@@ -15,13 +15,16 @@ For each specimen, the calculator reports ASTM-oriented results and selected res
 - l85, l75, and l65
 - Post-peak slope, |m75|
 - CTIndex
-- Indirect tensile strength, St
-- Fracture Strain Tolerance (FST), as an additional research parameter
-- Selected data-quality and reporting diagnostics
+
+Indirect tensile strength (St) and selected data-quality diagnostics are also reported because they support the additional research output and QC review.
+
+### Additional research parameters
+
+- Fracture Strain Tolerance (FST), reported separately from the ASTM D8225-26 results
 
 The program keeps full numerical precision during calculation. The ASTM reporting precision is applied to the exported summary presentation.
 
-### Additional research parameter: FST
+### Fracture Strain Tolerance (FST)
 
 The calculator also reports **Fracture Strain Tolerance (FST)** as an additional research parameter. FST is not a required result in ASTM D8225-26 and is not used in the CTIndex calculation.
 
@@ -33,7 +36,7 @@ FST = (Gf / St) × 10^6
 
 where VTRC expresses `Gf` in kN/mm and `St` in kPa. In this calculator, `Gf` is stored as J/m², so the numerically equivalent implementation is `FST = Gf / St`, with FST reported in mm. The VTRC studies treated FST as an IDT-CT performance index alongside CT index, strength, and CRI. [VTRC FHWA/VTRC 23-R3](https://vtrc.virginia.gov/media/vtrc/vtrc-pdf/vtrc-pdf/23-R3.pdf).
 
-FST is presented separately from the ASTM D8225-26 results to avoid implying that it is specified by the standard.
+FST is presented separately from the ASTM D8225-26 results. It is not used in the CTIndex calculation and should not be interpreted as an ASTM D8225-26 reporting requirement.
 
 ## Input formats
 
@@ -65,6 +68,21 @@ Install the runtime dependencies with:
 
 ```bash
 pip install -r requirements.txt
+```
+
+## Data normalization
+
+The test is normally performed after the specimen is seated in the fixture, so the recorded load may begin with a non-zero seating load and the displacement transducer may not start at zero. To place the analysis on a common zero reference, the calculator subtracts the first recorded load and first recorded LLD value by default.
+
+This normalization is applied after the input reader converts both supported CSV formats to the same internal `Time`, `Load Cell`, and `Frame LVDT` columns. Therefore, equipment/export files and custom CSV files receive the same zero-reference treatment. The original first recorded data point is retained; it is not discarded.
+
+You can disable this normalization explicitly when using `analyze_ct_file()`:
+
+```python
+results, data, input_format = analyze_ct_file(
+    "test.csv",
+    baseline_correction=False,
+)
 ```
 
 ## Run a batch analysis
