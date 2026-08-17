@@ -46,6 +46,8 @@ The post-peak displacements l85, l75, and l65 are obtained by linear interpolati
 
 The program performs linear regression using all post-peak data points between P85 and P65. The regression is performed using displacement in mm and load in kN, so the numerical slope is in kN/mm. This numerical value is the same as the ASTM reporting value in MN/m.
 
+If the record does not contain enough data points in the P85-P65 interval for the regression, the existing project fallback calculates the slope directly from the P85 and P65 values. The output includes `Post-Peak Slope Fallback Used = True` when this fallback is used.
+
 ### CTIndex
 
 The implemented equation is:
@@ -66,7 +68,7 @@ Normalization can be disabled through the `baseline_correction=False` option in 
 
 ## Data termination
 
-D8225-26 specifies stopping the test when the load drops below 100 N (0.1 kN). The calculator checks the post-peak data for the first point below 0.1 kN and, by default, ends the numerical analysis at that point.
+D8225-26 specifies stopping the test when the load drops below 100 N (0.1 kN). The calculator checks the post-peak **measured load** for the first point below 0.1 kN and, by default, ends the numerical analysis at that point. This endpoint check uses the raw load column even when baseline normalization is applied to the calculation data.
 
 A file that ends before this condition is reached is not presented as a complete ASTM test record. The calculator reports a QC warning and continues using the data supplied so that exploratory analysis is still possible.
 

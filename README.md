@@ -122,7 +122,7 @@ The implementation follows the supplied D8225-26 definitions and equations for t
 - **Wf:** area under the load-LLD curve using the quadrangle rule. For sequential data points, the implemented expression is the equivalent trapezoidal summation.
 - **Gf:** `Wf / (D × t) × 10^6`, giving J/m² when Wf is in J and D and t are in mm.
 - **l75:** post-peak displacement at 75% of the peak load.
-- **|m75|:** linear-regression slope using all post-peak data points between P85 and P65. The calculation is performed in kN/mm; the reported ASTM unit is MN/m, with the same numerical value.
+- **|m75|:** linear-regression slope using all post-peak data points between P85 and P65. The calculation is performed in kN/mm; the reported ASTM unit is MN/m, with the same numerical value. If regression cannot be performed, the existing project fallback is used and flagged in the results as `Post-Peak Slope Fallback Used`.
 - **CTIndex:** `(t / 62) × (l75 / D) × (Gf / |m75|)`.
 
 See `docs/ASTM_D8225_26_Methodology.md` for the calculation details and QC scope.
@@ -131,7 +131,7 @@ See `docs/ASTM_D8225_26_Methodology.md` for the calculation details and QC scope
 
 The program reports warnings for selected requirements that can be evaluated from the supplied file, including:
 
-- whether the post-peak record reached below 0.1 kN;
+- whether the post-peak measured load reached below 0.1 kN;
 - estimated sampling frequency below 40 samples/s;
 - a full-record displacement-rate estimate outside 50 ± 2 mm/min;
 - specimen-dimension issues that can be classified from the supplied specimen type and NMAS;

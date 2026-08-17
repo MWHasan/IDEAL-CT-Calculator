@@ -86,7 +86,7 @@ results, data, input_format = analyze_ct_file(
 
 ## Terminal load and record length
 
-D8225-26 specifies that testing stops when the load drops below 100 N (0.1 kN). When enabled, the calculator cuts the analysis record at the first post-peak point below 0.1 kN.
+D8225-26 specifies that testing stops when the measured load drops below 100 N (0.1 kN). When enabled, the calculator cuts the analysis record at the first post-peak measured-load point below 0.1 kN. This check uses the raw load value even when baseline normalization is applied to the calculation data.
 
 If the supplied file never reaches below 0.1 kN, the calculator retains the available record and reports a QC warning. It does not label the record as a complete ASTM test.
 
@@ -97,6 +97,10 @@ D8225-26 requires at least 40 data points per second for time, load, and LLD. Th
 ## Displacement-rate diagnostic
 
 D8225-26 specifies an LLD rate of 50 ± 2 mm/min. The calculator reports a simple full-record displacement-rate estimate as a diagnostic. Because the measured displacement can include seating and post-failure behavior, this estimate is not a substitute for review of the actual machine control interval.
+
+## Post-peak slope fallback flag
+
+The preferred calculation uses linear regression with all post-peak data points between P85 and P65. If there are too few points in that interval for regression, the calculator retains the project fallback calculation based on the P85 and P65 values. The exported summary reports `Post-Peak Slope Fallback Used` as `True` when this fallback is used.
 
 ## Common mistakes to avoid
 

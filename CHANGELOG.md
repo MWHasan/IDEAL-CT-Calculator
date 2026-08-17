@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.3] - Development version
+
+### Changed
+- The ASTM 0.1 kN termination check now uses the raw measured load, while baseline-normalized load remains the basis for the calculation workflow.
+- The post-peak slope calculation retains the existing P85-P65 fallback when linear regression cannot be performed, and the result now includes an explicit `Post-Peak Slope Fallback Used` flag.
+- Updated the software version to 0.1.3.
+
+
 ## [0.1.2] - Development version
 
 ### Changed

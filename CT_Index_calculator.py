@@ -27,7 +27,7 @@ import pandas as pd
 from scipy.interpolate import interp1d
 from scipy.stats import linregress
 
-SOFTWARE_VERSION = "0.1.2"
+SOFTWARE_VERSION = "0.1.3"
 METHOD_BASIS = "ASTM D8225-26"
 DEFAULT_DIAMETER_MM = 150.0
 DEFAULT_THICKNESS_MM = 62.0
@@ -357,7 +357,10 @@ def analyze_ct_file(
 
     peak_idx = int(df["Load Cell_Norm"].idxmax())
     post_peak = df.loc[peak_idx:]
-    terminal_candidates = post_peak[post_peak["Load Cell_Norm"] < TERMINAL_LOAD_KN].index
+    # ASTM D8225-26 defines the test endpoint from the measured load.
+    # Use the raw Load Cell value for this check, even when baseline normalization
+    # is applied to the calculation data.
+    terminal_candidates = post_peak[post_peak["Load Cell"] < TERMINAL_LOAD_KN].index
     terminated_at_01kN = not terminal_candidates.empty
 
     if terminated_at_01kN and apply_terminal_load_cutoff:
@@ -404,10 +407,15 @@ def analyze_ct_file(
         (post_peak_df["Load Cell_Norm"] <= P85)
         & (post_peak_df["Load Cell_Norm"] >= P65)
     ]
+    m75_fallback_used = False
     if len(slope_df) > 1:
         m75 = abs(linregress(slope_df["Frame LVDT_Norm"], slope_df["Load Cell_Norm"]).slope)
     elif not np.isnan(l85) and not np.isnan(l65) and l65 != l85:
+        # Fallback for records that do not contain enough points in the P85-P65
+        # interval for a regression. This preserves the earlier project behavior
+        # but is explicitly flagged in the output.
         m75 = abs((P85 - P65) / (l85 - l65))
+        m75_fallback_used = True
     else:
         m75 = np.nan
 
@@ -477,6 +485,7 @@ def analyze_ct_file(
         "P65 [kN]": P65,
         "l65 [mm]": l65,
         "Post-Peak Slope (|m75|) [MN/m]": m75,
+        "Post-Peak Slope Fallback Used": m75_fallback_used,
         "CTIndex": ct_index,
         "QC Warnings": " | ".join(warnings) if warnings else "None",
     }
