@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.0.0] - 2026-08-17
+
+### Added
+- First stable public release of the IDEAL-CT Calculator.
+- ASTM D8225-26-based calculation workflow for Wf, Gf, l85, l75, l65, |m75|, and CTIndex.
+- Zero-reference normalization for load and LLD data.
+- Support for custom CSV and compatible equipment/export CSV formats.
+- ASTM-oriented quality-control diagnostics.
+- Fracture Strain Tolerance (FST) as an additional research parameter based on VTRC IDT-CT literature.
+- Batch processing and Excel summary output.
+
+### Notes
+- FST is reported separately from ASTM D8225-26 results.
+- The software does not certify laboratory compliance with ASTM D8225-26.
+- The repository does not include proprietary validation/reference data.
+
 ## [0.1.3] - Development version
 
 ### Changed
