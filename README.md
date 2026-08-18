@@ -153,21 +153,5 @@ Roadway cores may be used when the pavement layer is more than 38 mm thick; the 
 
 The calculator therefore does not assume that every valid laboratory specimen is 150 × 62 mm. Thickness is also retained in the CTIndex correction.
 
-## Reporting precision
 
-The exported specimen summary follows the D8225-26 reporting precision for the specified fields:
-
-| Parameter | Display precision |
-|---|---:|
-| Test temperature | 0.1 °C |
-| Air voids | 0.1 % |
-| Thickness | 0.1 mm |
-| Diameter | 1 mm |
-| l75 | 0.01 mm |
-| |m75| | 0.001 MN/m |
-| Gf | 1 J/m² |
-| FST | 0.01 mm |
-| CTIndex | 0.1 |
-
-Intermediate calculations are not rounded.
 
